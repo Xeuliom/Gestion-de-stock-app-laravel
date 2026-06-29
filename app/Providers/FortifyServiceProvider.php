@@ -42,6 +42,14 @@ class FortifyServiceProvider extends ServiceProvider
         /* @chisel-registration */
         Fortify::createUsersUsing(CreateNewUser::class);
         /* @end-chisel-registration */
+
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = \App\Models\User::where('username', $request->username)->first();
+
+            if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+        });
     }
 
     /**
