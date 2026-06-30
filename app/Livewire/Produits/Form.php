@@ -14,14 +14,23 @@ use Livewire\Component;
 class Form extends Component
 {
     public ?Produit $produit = null;
+
     public string $reference = '';
+
     public string $nom = '';
+
     public string $description = '';
+
     public string $categorie_id = '';
+
     public string $fournisseur_id = '';
+
     public string $prix_achat = '';
+
     public string $prix_vente = '';
+
     public string $quantite_disponible = '0';
+
     public string $seuil_alerte = '5';
 
     public function mount(?int $id = null): void
@@ -43,7 +52,7 @@ class Form extends Component
     public function sauvegarder(): void
     {
         $this->validate([
-            'reference' => 'required|string|max:100|unique:produits,reference' . ($this->produit ? ",{$this->produit->id}" : ''),
+            'reference' => 'required|string|max:100|unique:produits,reference'.($this->produit ? ",{$this->produit->id}" : ''),
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
             'categorie_id' => 'nullable|exists:categories,id',

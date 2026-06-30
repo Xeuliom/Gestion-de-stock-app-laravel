@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $quantite
  * @property string|null $motif
  * @property int|null $user_id
- * @property \Illuminate\Support\Carbon $date_mouvement
+ * @property Carbon $date_mouvement
  */
 class MouvementStock extends Model
 {

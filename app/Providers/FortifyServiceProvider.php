@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-/* @chisel-registration */
 use App\Actions\Fortify\CreateNewUser;
-/* @end-chisel-registration */
 use App\Actions\Fortify\ResetUserPassword;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -39,14 +39,12 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureActions(): void
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-        /* @chisel-registration */
         Fortify::createUsersUsing(CreateNewUser::class);
-        /* @end-chisel-registration */
 
         Fortify::authenticateUsing(function (Request $request) {
-            $user = \App\Models\User::where('username', $request->username)->first();
+            $user = User::where('username', $request->username)->first();
 
-            if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            if ($user && Hash::check($request->password, $user->password)) {
                 return $user;
             }
         });
@@ -58,18 +56,10 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureViews(): void
     {
         Fortify::loginView(fn () => view('pages::auth.login'));
-        /* @chisel-email-verification */
         Fortify::verifyEmailView(fn () => view('pages::auth.verify-email'));
-        /* @end-chisel-email-verification */
-        /* @chisel-2fa */
         Fortify::twoFactorChallengeView(fn () => view('pages::auth.two-factor-challenge'));
-        /* @end-chisel-2fa */
-        /* @chisel-password-confirmation */
         Fortify::confirmPasswordView(fn () => view('pages::auth.confirm-password'));
-        /* @end-chisel-password-confirmation */
-        /* @chisel-registration */
         Fortify::registerView(fn () => view('pages::auth.register'));
-        /* @end-chisel-registration */
         Fortify::resetPasswordView(fn () => view('pages::auth.reset-password'));
         Fortify::requestPasswordResetLinkView(fn () => view('pages::auth.forgot-password'));
     }
@@ -89,7 +79,6 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($throttleKey);
         });
 
-        /* @chisel-passkeys */
         RateLimiter::for('passkeys', function (Request $request) {
             $credentialId = $request->input('credential.id');
 
@@ -97,6 +86,5 @@ class FortifyServiceProvider extends ServiceProvider
                 ($credentialId ?: $request->session()->getId()).'|'.$request->ip(),
             );
         });
-        /* @end-chisel-passkeys */
     }
 }

@@ -31,10 +31,9 @@ class Index extends Component
     {
         $fournisseurs = Fournisseur::query()
             ->withCount('produits')
-            ->when($this->recherche, fn($q) =>
-                $q->where('nom', 'like', "%{$this->recherche}%")
-                  ->orWhere('contact', 'like', "%{$this->recherche}%")
-                  ->orWhere('telephone', 'like', "%{$this->recherche}%")
+            ->when($this->recherche, fn ($q) => $q->where('nom', 'like', "%{$this->recherche}%")
+                ->orWhere('contact', 'like', "%{$this->recherche}%")
+                ->orWhere('telephone', 'like', "%{$this->recherche}%")
             )
             ->orderBy('nom')
             ->paginate(10);

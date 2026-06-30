@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Produits;
 
+use App\Models\Categorie;
 use App\Models\Produit;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -15,7 +16,9 @@ class Index extends Component
     use WithPagination;
 
     public string $recherche = '';
+
     public string $filtreCategorie = '';
+
     public string $filtreStock = '';
 
     public function updatingRecherche(): void
@@ -33,14 +36,14 @@ class Index extends Component
     {
         $produits = Produit::query()
             ->with(['categorie', 'fournisseur'])
-            ->when($this->recherche, fn($q) => $q->recherche($this->recherche))
-            ->when($this->filtreCategorie, fn($q) => $q->where('categorie_id', $this->filtreCategorie))
-            ->when($this->filtreStock === 'rupture', fn($q) => $q->enRuptureDeStock())
-            ->when($this->filtreStock === 'disponible', fn($q) => $q->whereColumn('quantite_disponible', '>', 'seuil_alerte'))
+            ->when($this->recherche, fn ($q) => $q->recherche($this->recherche))
+            ->when($this->filtreCategorie, fn ($q) => $q->where('categorie_id', $this->filtreCategorie))
+            ->when($this->filtreStock === 'rupture', fn ($q) => $q->enRuptureDeStock())
+            ->when($this->filtreStock === 'disponible', fn ($q) => $q->whereColumn('quantite_disponible', '>', 'seuil_alerte'))
             ->orderBy('nom')
             ->paginate(10);
 
-        $categories = \App\Models\Categorie::orderBy('nom')->get();
+        $categories = Categorie::orderBy('nom')->get();
 
         return view('livewire.produits.index', compact('produits', 'categories'));
     }

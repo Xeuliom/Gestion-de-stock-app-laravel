@@ -74,8 +74,8 @@ class Produit extends Model
     {
         return $query->where(function ($q) use ($terme) {
             $q->where('nom', 'like', "%{$terme}%")
-              ->orWhere('reference', 'like', "%{$terme}%")
-              ->orWhereHas('categorie', fn($c) => $c->where('nom', 'like', "%{$terme}%"));
+                ->orWhere('reference', 'like', "%{$terme}%")
+                ->orWhereHas('categorie', fn ($c) => $c->where('nom', 'like', "%{$terme}%"));
         });
     }
 }

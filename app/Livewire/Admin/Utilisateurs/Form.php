@@ -12,11 +12,17 @@ use Livewire\Component;
 class Form extends Component
 {
     public ?User $utilisateur = null;
+
     public string $name = '';
+
     public string $username = '';
+
     public string $email = '';
+
     public string $password = '';
+
     public string $password_confirmation = '';
+
     public string $role = 'magasinier';
 
     public function mount(?int $id = null): void
@@ -34,8 +40,8 @@ class Form extends Component
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username' . ($this->utilisateur ? ",{$this->utilisateur->id}" : ''),
-            'email' => 'nullable|email|max:255|unique:users,email' . ($this->utilisateur ? ",{$this->utilisateur->id}" : ''),
+            'username' => 'required|string|max:255|unique:users,username'.($this->utilisateur ? ",{$this->utilisateur->id}" : ''),
+            'email' => 'nullable|email|max:255|unique:users,email'.($this->utilisateur ? ",{$this->utilisateur->id}" : ''),
             'role' => 'required|in:admin,magasinier',
         ];
 

@@ -15,6 +15,7 @@ class Index extends Component
     use WithPagination;
 
     public string $recherche = '';
+
     public string $filtreRole = '';
 
     public function updatingRecherche(): void
@@ -26,6 +27,7 @@ class Index extends Component
     {
         if ($id === auth()->id()) {
             session()->flash('erreur', 'Vous ne pouvez pas supprimer votre propre compte.');
+
             return;
         }
         User::findOrFail($id)->delete();
@@ -35,11 +37,10 @@ class Index extends Component
     public function render()
     {
         $utilisateurs = User::query()
-            ->when($this->recherche, fn($q) =>
-                $q->where('name', 'like', "%{$this->recherche}%")
-                  ->orWhere('username', 'like', "%{$this->recherche}%")
+            ->when($this->recherche, fn ($q) => $q->where('name', 'like', "%{$this->recherche}%")
+                ->orWhere('username', 'like', "%{$this->recherche}%")
             )
-            ->when($this->filtreRole, fn($q) => $q->where('role', $this->filtreRole))
+            ->when($this->filtreRole, fn ($q) => $q->where('role', $this->filtreRole))
             ->orderBy('name')
             ->paginate(10);
 

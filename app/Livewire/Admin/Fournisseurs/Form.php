@@ -12,10 +12,15 @@ use Livewire\Component;
 class Form extends Component
 {
     public ?Fournisseur $fournisseur = null;
+
     public string $nom = '';
+
     public string $contact = '';
+
     public string $telephone = '';
+
     public string $email = '';
+
     public string $adresse = '';
 
     public function mount(?int $id = null): void

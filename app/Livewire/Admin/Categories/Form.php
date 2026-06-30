@@ -12,7 +12,9 @@ use Livewire\Component;
 class Form extends Component
 {
     public ?Categorie $categorie = null;
+
     public string $nom = '';
+
     public string $description = '';
 
     public function mount(?int $id = null): void
